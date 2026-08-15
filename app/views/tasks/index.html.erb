@@ -1,2 +1,444 @@
-<h1>Tasks#index</h1>
-<p>Find me in app/views/tasks/index.html.erb</p>
+<% content_for :head do %>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+<% end %>
+
+<style>
+  :root {
+    --coral: #D3968C;
+    --cream: #F7F4D5;
+    --blue: #839958;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    font-family: 'Ubuntu', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, var(--cream) 0%, var(--coral) 55%, var(--blue) 100%);
+    background-size: 200% 200%;
+    animation: gradientShift 14s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0%   { background-position: 0% 30%; }
+    50%  { background-position: 100% 70%; }
+    100% { background-position: 0% 30%; }
+  }
+
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.55;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .blob-1 {
+    width: 380px;
+    height: 380px;
+    background: var(--blue);
+    top: -120px;
+    left: -100px;
+    animation: float1 16s ease-in-out infinite;
+  }
+
+  .blob-2 {
+    width: 320px;
+    height: 320px;
+    background: var(--coral);
+    bottom: -100px;
+    right: -80px;
+    animation: float2 18s ease-in-out infinite;
+  }
+
+  .blob-3 {
+    width: 240px;
+    height: 240px;
+    background: var(--cream);
+    bottom: 10%;
+    left: 8%;
+    opacity: 0.5;
+    animation: float3 20s ease-in-out infinite;
+  }
+
+  @keyframes float1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%      { transform: translate(40px, 60px) scale(1.1); }
+  }
+
+  @keyframes float2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%      { transform: translate(-50px, -40px) scale(1.15); }
+  }
+
+  @keyframes float3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%      { transform: translate(30px, -30px) scale(0.9); }
+  }
+
+  .login-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 320px;
+    padding: 28px 26px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow:
+      0 8px 32px rgba(103, 162, 197, 0.25),
+      0 2px 8px rgba(216, 90, 48, 0.08),
+      inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    animation: cardIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(24px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .login-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    padding: 1px;
+    background: linear-gradient(140deg, rgba(255,255,255,0.8), rgba(255,255,255,0) 40%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    margin: 0 auto 14px;
+    background: linear-gradient(135deg, var(--blue), var(--coral));
+    box-shadow: 0 6px 16px rgba(103, 162, 197, 0.35);
+  }
+
+  .brand svg {
+    width: 20px;
+    height: 20px;
+    stroke: #fff;
+  }
+
+  .login-card h1 {
+    font-weight: 500;
+    font-size: 20px;
+    color: #4A3428;
+    text-align: center;
+    margin-bottom: 4px;
+    letter-spacing: -0.3px;
+  }
+
+  .login-card .subtitle {
+    font-weight: 300;
+    font-size: 13px;
+    color: #6b5548;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .field {
+    margin-bottom: 14px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #4A3428;
+    margin-bottom: 6px;
+    letter-spacing: 0.2px;
+  }
+
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-wrap svg {
+    position: absolute;
+    left: 14px;
+    width: 16px;
+    height: 16px;
+    stroke: #8a7261;
+    pointer-events: none;
+    transition: stroke 0.2s ease;
+  }
+
+  .field input {
+    width: 100%;
+    padding: 11px 14px 11px 40px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.45);
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 13.5px;
+    color: #4A3428;
+    outline: none;
+    transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .field input::placeholder {
+    color: #a3907e;
+    font-weight: 300;
+  }
+
+  .field input:hover {
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .field input:focus {
+    border-color: var(--blue);
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow: 0 0 0 4px rgba(103, 162, 197, 0.2);
+  }
+
+  .field input:focus + svg,
+  .input-wrap:focus-within svg {
+    stroke: var(--blue);
+  }
+
+  .row-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    font-size: 12px;
+  }
+
+  .remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6b5548;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .remember input {
+    accent-color: var(--blue);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+  }
+
+  .forgot {
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .forgot:hover {
+    color: #4a7a99;
+    text-decoration: underline;
+  }
+
+  .btn-login {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--blue), #4a8bb3);
+    color: #fff;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(103, 162, 197, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+  }
+
+  .btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(103, 162, 197, 0.55);
+    background: linear-gradient(135deg, #5a97bd, var(--blue));
+  }
+
+  .btn-login:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 14px rgba(103, 162, 197, 0.4);
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0;
+    color: #a3907e;
+    font-size: 11.5px;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgba(160, 130, 105, 0.3);
+  }
+
+  .btn-google {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.4);
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #4A3428;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .btn-google:hover {
+    background: rgba(255, 255, 255, 0.65);
+    transform: translateY(-1px);
+  }
+
+  .btn-google svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .signup-text {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: #6b5548;
+  }
+
+  .signup-text a {
+    color: var(--blue);
+    font-weight: 500;
+    text-decoration: none;
+    margin-left: 4px;
+    transition: color 0.2s ease;
+  }
+
+  .signup-text a:hover {
+    color: #4a7a99;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 480px) {
+    .login-card {
+      max-width: 280px;
+      padding: 24px 22px;
+      border-radius: 20px;
+    }
+
+    .login-card h1 {
+      font-size: 18px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body, .blob, .login-card {
+      animation: none !important;
+    }
+  }
+</style>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="login-card">
+  <div class="brand">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+  </div>
+
+  <h1>Welcome back</h1>
+  <p class="subtitle">Sign in to continue</p>
+
+  <%# ส่งข้อมูลแบบ POST ไปยัง login_path (TasksController#login) %>
+  <%= form_with url: login_path, method: :post, local: true do |f| %>
+    <div class="field">
+      <%= f.label :email, "Email" %>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16v16H4z" stroke="none"></path>
+          <path d="M22 6l-10 7L2 6"></path>
+          <path d="M2 6h20v12H2z"></path>
+        </svg>
+        <%= f.email_field :email, id: "email", placeholder: "name@example.com", required: true %>
+      </div>
+    </div>
+
+    <div class="field">
+      <%= f.label :password, "Password" %>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="11" width="14" height="9" rx="2"></rect>
+          <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+        </svg>
+        <%= f.password_field :password, id: "password", placeholder: "••••••••", required: true %>
+      </div>
+    </div>
+
+    <div class="row-between">
+      <label class="remember">
+        <%= f.check_box :remember_me %>
+        Remember me
+      </label>
+      <%= link_to "Forgot password?", "#", class: "forgot" %>
+    </div>
+
+    <%= f.submit "Log in", class: "btn-login" %>
+  <% end %>
+
+  <div class="divider">or</div>
+
+  <%= link_to "/auth/google_oauth2", method: :post, class: "btn-google", data: { turbo: false } do %>
+    <svg viewBox="0 0 24 24">
+      <path fill="#4285F4" d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.64h6.47a5.53 5.53 0 0 1-2.4 3.63v3h3.88c2.27-2.09 3.57-5.17 3.57-8.82z"/>
+      <path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.95-2.91l-3.88-3c-1.08.72-2.46 1.15-4.07 1.15-3.13 0-5.78-2.11-6.73-4.96H1.26v3.11A11.99 11.99 0 0 0 12 24z"/>
+      <path fill="#FBBC05" d="M5.27 14.28A7.2 7.2 0 0 1 4.89 12c0-.79.14-1.56.38-2.28V6.61H1.26A11.99 11.99 0 0 0 0 12c0 1.94.46 3.77 1.26 5.39l4.01-3.11z"/>
+      <path fill="#EA4335" d="M12 4.77c1.76 0 3.35.61 4.6 1.79l3.44-3.44C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.69 1.26 6.61l4.01 3.11C6.22 6.87 8.87 4.77 12 4.77z"/>
+    </svg>
+    Continue with Google
+  <% end %>
+
+  <p class="signup-text">
+    Don't have an account?
+    <%= link_to "Sign up", "#" %>
+  </p>
+</div>
