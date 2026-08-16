@@ -8,8 +8,8 @@ Rails.application.routes.draw do
   resources :tasks
 
   # หน้าแรกของ tasks
-  root "tasks#index" 
-  get "tasks", to: "tasks#index"
+  root "taks#index" 
+  get "taks", to: "taks#index"
 
   # Route สำหรับรับค่า Form Submission จากหน้า Login
   post "login", to: "tasks#login", as: :login
