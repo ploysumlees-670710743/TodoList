@@ -1,70 +1,37 @@
 class TaksController < ApplicationController
   before_action :set_tak, only: %i[ show edit update destroy ]
 
-  # GET /taks or /taks.json
+  # GET /taks
   def index
-    @taks = Tak.all
+    @taks = Tak.all.order(created_at: :desc) # โหลดรายการทั้งหมด (เอาอันใหม่ขึ้นก่อน)
+    @tak = Tak.new                           # เตรียมไว้สำหรับฟอร์มสร้างใหม่
   end
 
-  # GET /taks/1 or /taks/1.json
-  def show
-  end
-
-  # GET /taks/new
-  def new
-    @tak = Tak.new
-  end
-
-  # GET /taks/1/edit
-  def edit
-  end
-
-  # POST /taks or /taks.json
+  # POST /taks
   def create
     @tak = Tak.new(tak_params)
 
-    respond_to do |format|
-      if @tak.save
-        format.html { redirect_to taks_path, notice: "Tak was successfully created." }
-        format.json { render :show, status: :created, location: @tak }
-      else
-        format.html { render :new, status: :unprocessable_content }
-        format.json { render json: @tak.errors, status: :unprocessable_content }
-      end
+    if @tak.save
+      redirect_to taks_path, notice: "Task was successfully created."
+    else
+      @taks = Tak.all.order(created_at: :desc)
+      render :index, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /taks/1 or /taks/1.json
-  def update
-    respond_to do |format|
-      if @tak.update(tak_params)
-        format.html { redirect_to @tak, notice: "Tak was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @tak }
-      else
-        format.html { render :edit, status: :unprocessable_content }
-        format.json { render json: @tak.errors, status: :unprocessable_content }
-      end
-    end
-  end
-
-  # DELETE /taks/1 or /taks/1.json
+  # DELETE /taks/1
   def destroy
-    @tak.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to taks_path, notice: "Tak was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
-    end
+    @tak.destroy
+    redirect_to taks_path, notice: "Task was successfully deleted."
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_tak
-      @tak = Tak.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def tak_params
-      params.expect(tak: [ :title, :completed ])
-    end
+  def set_tak
+    @tak = Tak.find(params[:id])
+  end
+
+  def tak_params
+    params.require(:tak).permit(:title, :completed)
+  end
 end
