@@ -1,0 +1,14 @@
+<% content_for :title, "Editing task" %>
+
+<div class="container">
+  <h1 class="page-title">Editing Task</h1>
+
+  <%= render "form", tak: @tak %>
+
+  <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
+
+  <div>
+    <%= link_to "Show this task", @tak, class: "btn-primary", style: "background-color: #e0e7ff; color: #3730a3;" %>
+    <%= link_to "Back to tasks", taks_path, class: "link-secondary", style: "margin-left: 10px;" %>
+  </div>
+</div>

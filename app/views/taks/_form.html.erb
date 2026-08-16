@@ -1,0 +1,26 @@
+<%= form_with(model: tak) do |form| %>
+  <% if tak.errors.any? %>
+    <div class="error-box">
+      <h2 style="font-size: 14px; font-weight: bold; margin-top: 0;"><%= pluralize(tak.errors.count, "error") %> prohibited this task from being saved:</h2>
+      <ul style="margin-bottom: 0; padding-left: 20px; font-size: 13px;">
+        <% tak.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :title, class: "form-label" %>
+    <%= form.text_field :title, class: "form-input", placeholder: "Enter task title..." %>
+  </div>
+
+  <div class="form-group form-checkbox-group">
+    <%= form.check_box :completed, style: "width: 16px; height: 16px; cursor: pointer;" %>
+    <%= form.label :completed, class: "form-label", style: "margin-bottom: 0; cursor: pointer;" %>
+  </div>
+
+  <div class="form-group" style="margin-top: 20px;">
+    <%= form.submit class: "btn-primary", style: "width: 100%;" %>
+  </div>
+<% end %>

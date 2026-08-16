@@ -1,0 +1,22 @@
+<% content_for :title, "Tasks" %>
+
+<div class="container">
+  <% if notice.present? %>
+    <p class="notice-message"><%= notice %></p>
+  <% end %>
+
+  <div class="header-actions">
+    <h1 class="page-title" style="margin-bottom: 0;">Tasks</h1>
+    <%= link_to "+ New task", new_tak_path, class: "btn-primary" %> <!--create new task แบบปกติ-->
+    
+  </div>
+
+  <div id="taks"> <!-- id คือเอาไปเชื่อมกับ turbo-->
+    <% @taks.each do |tak| %>
+      <div class="task-card">
+        <%= render tak %>
+        <%= link_to "Show", tak, class: "btn-primary", style: "background-color: #e0e7ff; color: #3730a3;" %>
+      </div>
+    <% end %>
+  </div>
+</div>

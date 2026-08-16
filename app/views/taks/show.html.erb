@@ -1,0 +1,18 @@
+<div class="container">
+  <% if notice.present? %>
+    <p class="notice-message"><%= notice %></p>
+  <% end %>
+
+  <%= render @tak %>
+
+  <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
+
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <%= link_to "Edit this task", edit_tak_path(@tak), class: "btn-primary" %>
+      <%= link_to "Back to tasks", taks_path, class: "link-secondary", style: "margin-left: 10px;" %>
+    </div>
+
+    <%= button_to "Destroy this task", @tak, method: :delete, class: "btn-danger", form: { data: { turbo_confirm: "Are you sure?" } } %>
+  </div>
+</div>

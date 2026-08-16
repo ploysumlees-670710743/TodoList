@@ -1,0 +1,13 @@
+<% content_for :title, "New task" %>
+
+<div class="container">
+  <h1 class="page-title">New Task</h1>
+
+  <%= render "form", tak: @tak %>
+
+  <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
+
+  <div>
+    <%= link_to "← Back to tasks", taks_path, class: "link-secondary" %>
+  </div>
+</div>
